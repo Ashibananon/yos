@@ -81,7 +81,7 @@ unsigned long YRingBufferPutData(struct YRingBuffer *rb, void *data, unsigned lo
 		return 0;
 	}
 
-	int cnt = 0;
+	unsigned long cnt = 0;
 	while (cnt < len) {
 		if (rb->end == rb->start) {
 			if (rb->current_len == rb->size) {
@@ -120,7 +120,7 @@ unsigned long YRingBufferGetData(struct YRingBuffer *rb, void *data, unsigned lo
 		return 0;
 	}
 
-	int cnt = 0;
+	unsigned long cnt = 0;
 	while (cnt < len) {
 		if (rb->end == rb->start) {
 			if (rb->current_len == rb->size) {

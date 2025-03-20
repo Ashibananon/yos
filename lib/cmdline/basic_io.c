@@ -105,6 +105,10 @@ int32_t basic_io_readline(char *buf, uint16_t buf_len)
 		}
 	}
 
+	if (_byte_read == buf_len) {
+		*(buf + _byte_read - 1) = '\0';
+	}
+
 	return _byte_read;
 }
 

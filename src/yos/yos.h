@@ -5,7 +5,7 @@
  *
  */
 
- #ifndef _YOS_H_
+#ifndef _YOS_H_
 #define _YOS_H_
 
 #include <stdint.h>

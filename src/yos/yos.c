@@ -5,7 +5,7 @@
  *
  */
 
- #include <avr/interrupt.h>
+#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -341,7 +341,7 @@ int yos_delete_task(int task_id)
 #if (YOS_DEBUG_MSG_OUTPUT == 1)
 #define YOS_IDLE_TASK_STACK_SIZE		256
 #else
-#define YOS_IDLE_TASK_STACK_SIZE		50
+#define YOS_IDLE_TASK_STACK_SIZE		64
 #endif
 
 #define YOS_IDLE_TASK_NAME				"yosidle"

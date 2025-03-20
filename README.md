@@ -303,6 +303,7 @@ The following 3rd libraries are used and let me thanks the authors.
 下記の第三者ライブラリを利用しています、著作者方々に感謝の意を表させてください。
 
 - For AHT20
+
 is under the folder [lib/AVR_aht20]
 
 フォルダ[lib/AVR_aht20]に格納します
@@ -310,6 +311,7 @@ is under the folder [lib/AVR_aht20]
 https://github.com/kpierzynski/AVR_aht20
 
 - For SSD1306 OLED
+
 is under the folder [lib/ssd1306xled]
 
 フォルダ[lib/ssd1306xled]に格納します
