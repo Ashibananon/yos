@@ -213,11 +213,11 @@ int is_one_digit_hex(unsigned char hex, char *c)
 
 static void _make_args(char *cmdline, int *argc, char **argv)
 {
-	*argc = 0;
 	if (cmdline == NULL || argc == NULL || argv == NULL) {
 		return;
 	}
 
+	*argc = 0;
 	int cmdlen = strlen(cmdline);
 	int pos = 0;
 	int cur_token_start;
