@@ -9,7 +9,6 @@ Arduino nano with ATmega328P MCU
 
 ATmega328P MCUを搭載するArduino　NANO
 
-
 ### PIN Connection（PIN接続）
 | ATmega328P PIN | Function（機能） | Connect to Device（接続先） | PIN of connected device（接続先PIN） |
 | --- | --- | --- | --- |
@@ -21,12 +20,17 @@ ATmega328P MCUを搭載するArduino　NANO
 |  |  | AHT20 | SDA |
 | A5 | IIC SCL | SSD1306 | SCL |
 |  |  | AHT20 | SCL |
+| D4 | Digital Output | Motor Driver Board (with ULN2003) | IN4 |
+| D5 | Digital Output | Motor Driver Board (with ULN2003) | IN3 |
+| D6 | Digital Output | Motor Driver Board (with ULN2003) | IN2 |
+| D7 | Digital Output | Motor Driver Board (with ULN2003) | IN1 |
 
-<br>
-<br>
+#### Image: Atmega328P
 
 ![Connection Image（接続イメージ）](medias/yos_runs_on_arduino_nano.png)
 
+#### Image: Motor Driver Board
+![Motor Driver Board](medias/motor_driver_board_with_ULN2003.png)
 
 ### ATmega328P
 - 16 MHz CPU
@@ -60,7 +64,7 @@ ATmega328P MCUを搭載するArduino　NANO
 
   ユーザー用タイマー　（*** 動作確認はまだです ***）
 
-## Device（デバイス）
+## Hardware Interface Driver（ハードウェア　インタフェース　ドライバー）
 - ADC
 - IIC
 - USART
@@ -81,6 +85,10 @@ ATmega328P MCUを搭載するArduino　NANO
 - TEMT6000 Light Sensor
 
   TEMT6000明るさセンサー
+
+- 28BYJ-48 Step Motor(Driver Board with ULN2003)
+
+  28BYJ-48 ステップモーター（ULN2003のドライバーICを利用します）
 
 # How to use（使い方）
 It is quite easy to use YOS, maybe it will be faster to go and have a look at main()
@@ -211,6 +219,12 @@ Right now the following commands are available:
 
 	指定する時間（ミリ秒）で待ち合わせます
 
+- sm
+
+	Rotate Step Motor with specified [Direction] and [Pulse-sets Number]
+
+	方向とパルスセット数を指定してモーターを回転させる
+
 - ts
 
 	Show task status
@@ -241,6 +255,7 @@ Example（例）:
 		            echo
 		              si
 		           sleep
+		              sm
 		              ts
 		            exit
 		ATmega328p> echo hello yos world!
@@ -265,6 +280,8 @@ Example（例）:
 		ATmega328p> sleep 5000
 		sleep 5000 ms
 		5000 ms slept
+		ATmega328p> sm 0 20
+		ATmega328p> sm 1 20
 		ATmega328p> ts
 		ID    ST      SS     MSS    NAME
 		000    1      50      47    yosidle

@@ -15,6 +15,7 @@
 #include "cmdline.h"
 #include "basic_io.h"
 #include "../../src/yos/yos.h"
+#include "../../src/ysm_28byj_48.h"
 
 #if (CMDLINE_SUPPORT_LFS == 1)
 #include "../yfs/yfs.h"
@@ -327,6 +328,28 @@ static int _cmd_sleep(int argc, char **argv)
 	return 0;
 }
 
+/* usage: sm dir pulse_sets_number
+ *
+ * dir		0			Clockwise
+ * 			1			Counter-Clockwise
+ */
+static int _cmd_step_motor(int argc, char **argv)
+{
+	uint8_t dir;
+	uint16_t pulse_set_number;
+	int ret = -1;
+	if (argc == 3) {
+		dir = atoi(argv[1]);
+		pulse_set_number = atoi(argv[2]);
+		ret = ysm_rotate(dir == 0 ? YSM_DIRECTION_CLOCKWISE : YSM_DIRECTION_COUNTER_CLOCKWISE,
+						pulse_set_number);
+	} else {
+		/* TODO: Show cmd hints */
+	}
+
+	return ret;
+}
+
 static int _cmd_tasks_info(int argc, char **argv)
 {
 	_cmd_printf("ID    ST      SS     MSS    NAME\n");
@@ -356,6 +379,7 @@ static struct _cmd_info _cmd_list[] = {
 	CMD_INFO_ITEM(_cmd_echo, "echo", "Echo cmdline info"),
 	CMD_INFO_ITEM(_cmd_sys_info, "si", "Show system info"),
 	CMD_INFO_ITEM(_cmd_sleep, "sleep", "Sleep given ms"),
+	CMD_INFO_ITEM(_cmd_step_motor, "sm", "Step Motor test"),
 	CMD_INFO_ITEM(_cmd_tasks_info, "ts", "Show tasks info"),
 	CMD_INFO_ITEM(_cmd_exit, CMDLINE_EXIT_CMD_NAME, "Exit cmdline and recover log")
 };

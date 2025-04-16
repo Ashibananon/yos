@@ -6,6 +6,7 @@
  */
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,12 +21,18 @@
 #include "../lib/ssd1306xled/ssd1306xled/yos_ssd1306_font.h"
 #include "../lib/ssd1306xled/ssd1306xled/ssd1306xledtx.h"
 #include "../lib/AVR_aht20/src/aht20.h"
+#include "ysm_28byj_48.h"
 
 #define YIIC_MASTER_SPEED		100000
 
+#define _WITH_TEMT6000_MODULE	1
+
 static int8_t _temperature = 0;
 static uint8_t _humidity = 0;
+
+#if (_WITH_TEMT6000_MODULE == 1)
 static uint16_t _light_value = 0;
+#endif
 
 #define _BASIC_IO_WRITE(msg)	basic_io_write(msg, strlen(msg), 1)
 
@@ -100,10 +107,12 @@ static int _oled_task(void *para)
 						yos_ssd1306_char_col_to_pixel(YOS_SSD1306_FONT_6X8, 8),
 						4, buf);
 
+#if (_WITH_TEMT6000_MODULE == 1)
 		snprintf(buf, sizeof(buf), "Lt: %6u", _light_value);
 		yos_ssd1306_puts(YOS_SSD1306_FONT_6X8,
 						yos_ssd1306_char_col_to_pixel(YOS_SSD1306_FONT_6X8, 0),
 						6, buf);
+#endif
 
 		if (ss == 0) {
 			ssd1306_display_invert(invert);
@@ -132,6 +141,7 @@ static int _aht20_task(void *para)
 	return 0;
 }
 
+#if (_WITH_TEMT6000_MODULE == 1)
 static int _temt6000_task(void *para)
 {
 	while (1) {
@@ -149,12 +159,29 @@ static int _temt6000_task(void *para)
 
 	return 0;
 }
+#endif
+
+#if 0
+ISR(BADISR_vect)
+{
+	for (;;) UDR0='!';
+}
+#endif
 
 int main()
 {
 	if (basic_io_init(yusart_io_operations) != 0) {
 		return -1;
 	}
+
+#if 0
+	/* Check reset flags */
+	if(MCUSR & (1 << PORF )) _BASIC_IO_WRITE(PSTR("Power-on reset.\n"));
+	if(MCUSR & (1 << EXTRF)) _BASIC_IO_WRITE(PSTR("External reset!\n"));
+	if(MCUSR & (1 << BORF )) _BASIC_IO_WRITE(PSTR("Brownout reset!\n"));
+	if(MCUSR & (1 << WDRF )) _BASIC_IO_WRITE(PSTR("Watchdog reset!\n"));
+	MCUSR = 0;
+#endif
 
 	if (user_timer_init() != 0) {
 		return -1;
@@ -164,7 +191,13 @@ int main()
 		return -1;
 	}
 
+#if (_WITH_TEMT6000_MODULE == 1)
 	if (yadc_init() != 0) {
+		return -1;
+	}
+#endif
+
+	if (ysm_init() != 0) {
 		return -1;
 	}
 
@@ -185,9 +218,11 @@ int main()
 		return -1;
 	}
 
+#if (_WITH_TEMT6000_MODULE == 1)
 	if (yos_create_task(_temt6000_task, NULL, 100, "temttsk") < 0 ) {
 		return -1;
 	}
+#endif
 
 	yos_start();
 
