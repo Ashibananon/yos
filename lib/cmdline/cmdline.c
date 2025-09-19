@@ -418,7 +418,7 @@ static int _cmd_help(int argc, char **argv)
 	} else if (argc == 2) {
 		struct _cmd_info *item = _find_cmd_item_by_name(argv[1]);
 		if (item != NULL) {
-			_cmd_printf("%16s\t%s\n", item->cmd, _cmd_list[i].desc == NULL ? "" : _cmd_list[i].desc);
+			_cmd_printf("%16s\t%s\n", item->cmd, item->desc == NULL ? "" : item->desc);
 		} else {
 #if (CMDLINE_OUTPUT_VERBOSE == 0)
 			_cmd_printf("unknown cmd\n");
